@@ -4,7 +4,6 @@ import * as pty from 'node-pty';
 import * as path from 'path';
 import * as child_process from 'child_process';
 
-
 describe('colors', () => {
 	k.options.enabled = true; // Always enable colors, even in CLI environments
 
@@ -57,30 +56,37 @@ describe('colors', () => {
 describe('color switch', () => {
 	it('should be enabled in terminals by default', done => {
 		let output = '';
-		const term = pty.spawn(path.join(__dirname, '..', 'node_modules/.bin/ts-node'), [
-			'-e', 'console.log(require("./index.ts").blue("foo"))'
-		], {
-			name: 'test with pseudo tty',
-			cols: 80,
-			rows: 30,
-			cwd: __dirname,
-		});
-		term.onData(data => output += data);
+		const term = pty.spawn(
+			path.join(__dirname, '..', 'node_modules/.bin/ts-node'),
+			['-e', 'console.log(require("./index.ts").blue("foo"))'],
+			{
+				name: 'test with pseudo tty',
+				cols: 80,
+				rows: 30,
+				cwd: __dirname,
+			}
+		);
+		term.onData(data => (output += data));
 		term.onExit(() => {
-			t.equal(JSON.stringify(output.trim()), JSON.stringify('\x1B[34mfoo\x1B[39m'));
+			t.equal(
+				JSON.stringify(output.trim()),
+				JSON.stringify('\x1B[34mfoo\x1B[39m')
+			);
 			done();
 		});
 	}).timeout(20000); // typescript is slow
 
 	it('should be disabled in non-interactive terminals', done => {
 		let output = '';
-		const subprocess = child_process.spawn(path.join(__dirname, '..', 'node_modules/.bin/ts-node'), [
-			'-e', 'console.log(require("./index.ts").blue("foo"))'
-		], {
-			cwd: __dirname,
-			stdio: 'pipe',
-		});
-		subprocess.stdout.on('data', data => output += data);
+		const subprocess = child_process.spawn(
+			path.join(__dirname, '..', 'node_modules/.bin/ts-node'),
+			['-e', 'console.log(require("./index.ts").blue("foo"))'],
+			{
+				cwd: __dirname,
+				stdio: 'pipe',
+			}
+		);
+		subprocess.stdout.on('data', data => (output += data));
 		subprocess.on('exit', () => {
 			t.equal(JSON.stringify(output.trim()), JSON.stringify('foo'));
 			done();
@@ -94,8 +100,8 @@ describe('strip colors', () => {
 	});
 
 	it('should strip link', () => {
-		t.equal(k.stripColors(k.link('foo', 'foo')), 'foo')
-	})
+		t.equal(k.stripColors(k.link('foo', 'foo')), 'foo');
+	});
 });
 
 describe('links', () => {
