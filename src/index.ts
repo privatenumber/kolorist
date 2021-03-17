@@ -30,11 +30,9 @@ if (globalVar.process && globalVar.process.env && globalVar.process.stdout) {
 		process.stdout.isTTY;
 
 	if (enabled) {
-		if (TERM.endsWith('-256color')) {
-			supportLevel = SupportLevel.ansi256;
-		} else {
-			supportLevel = SupportLevel.ansi;
-		}
+		supportLevel = TERM?.endsWith('-256color')
+			? SupportLevel.ansi256
+			: SupportLevel.ansi;
 	}
 }
 
