@@ -17,7 +17,10 @@ function columnize(arr: string[], count: number = 16): string {
 }
 
 describe('colors', () => {
-	k.options.enabled = true; // Always enable colors, even in CLI environments
+	beforeEach(() => {
+		k.options.enabled = true; // Always enable colors, even in CLI environments
+		k.options.supportLevel = k.SupportLevel.ansi256;
+	});
 
 	it('should print colors', () => {
 		t.equal(k.cyan('foo'), '\u001b[36mfoo\u001b[39m');
@@ -65,6 +68,11 @@ describe('colors', () => {
 
 		it('should be stripped', () => {
 			t.equal(k.stripColors(k.ansi256(194)('foo')), 'foo');
+		});
+
+		it('should be ignored if no terminal support', () => {
+			k.options.supportLevel = k.SupportLevel.ansi;
+			t.equal(JSON.stringify(k.ansi256(194)('foo')), JSON.stringify('foo'));
 		});
 	});
 

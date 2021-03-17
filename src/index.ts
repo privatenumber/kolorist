@@ -10,7 +10,7 @@ const globalVar =
 		? global
 		: ({} as any);
 
-const enum SupportLevel {
+export const enum SupportLevel {
 	none,
 	ansi,
 	ansi256,
