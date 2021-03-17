@@ -30,7 +30,7 @@ if (globalVar.process && globalVar.process.env && globalVar.process.stdout) {
 		process.stdout.isTTY;
 
 	if (enabled) {
-		supportLevel = TERM?.endsWith('-256color')
+		supportLevel = TERM && TERM.endsWith('-256color')
 			? SupportLevel.ansi256
 			: SupportLevel.ansi;
 	}
