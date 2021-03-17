@@ -10,6 +10,17 @@ const globalVar =
 		? global
 		: ({} as any);
 
+const enum SupportLevel {
+	none,
+	ansi,
+	ansi256,
+}
+
+/**
+ * Detect how much colors the current terminal supports
+ */
+let supportLevel: SupportLevel = SupportLevel.none;
+
 if (globalVar.process && globalVar.process.env && globalVar.process.stdout) {
 	const { FORCE_COLOR, NODE_DISABLE_COLORS, TERM } = globalVar.process.env;
 	enabled =
@@ -17,19 +28,32 @@ if (globalVar.process && globalVar.process.env && globalVar.process.stdout) {
 		TERM !== 'dumb' &&
 		FORCE_COLOR !== '0' &&
 		process.stdout.isTTY;
+
+	if (enabled) {
+		if (TERM.endsWith('-256color')) {
+			supportLevel = SupportLevel.ansi256;
+		} else {
+			supportLevel = SupportLevel.ansi;
+		}
+	}
 }
 
 export let options = {
 	enabled,
+	supportLevel,
 };
 
-function kolorist(start: number, end: number) {
+function kolorist(
+	start: number | string,
+	end: number | string,
+	level: SupportLevel = SupportLevel.ansi
+) {
 	const open = `\x1b[${start}m`;
 	const close = `\x1b[${end}m`;
 	const regex = new RegExp(`\\x1b\\[${end}m`, 'g');
 
 	return (str: string | number) => {
-		return options.enabled
+		return options.enabled && options.supportLevel >= level
 			? open + ('' + str).replace(regex, open) + close
 			: '' + str;
 	};
@@ -37,7 +61,7 @@ function kolorist(start: number, end: number) {
 
 export function stripColors(str: string | number) {
 	return ('' + str)
-		.replace(/\x1b\[\d+m/g, '')
+		.replace(/\x1b\[[0-9;]+m/g, '')
 		.replace(/\x1b\]8;;.*?\x07(.*?)\x1b\]8;;\x07/g, (_, group) => group);
 }
 
@@ -88,6 +112,12 @@ export const bgLightBlue = kolorist(104, 49);
 export const bgLightMagenta = kolorist(105, 49);
 export const bgLightCyan = kolorist(106, 49);
 export const bgLightGray = kolorist(47, 49);
+
+// 256 support
+export const ansi256 = (n: number) =>
+	kolorist('38;5;' + n, 0, SupportLevel.ansi256);
+export const ansi256Bg = (n: number) =>
+	kolorist('48;5;' + n, 0, SupportLevel.ansi256);
 
 // Links
 const OSC = '\u001B]';

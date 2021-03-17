@@ -4,6 +4,18 @@ import * as pty from 'node-pty';
 import * as path from 'path';
 import * as child_process from 'child_process';
 
+function columnize(arr: string[], count: number = 16): string {
+	let out = '';
+	for (let i = 0; i < arr.length; i++) {
+		out += arr[i];
+		if ((i + 1) % count === 0) {
+			out += '\n';
+		}
+	}
+
+	return out;
+}
+
 describe('colors', () => {
 	k.options.enabled = true; // Always enable colors, even in CLI environments
 
@@ -39,6 +51,29 @@ describe('colors', () => {
 		}
 
 		columns.forEach(col => console.log.apply(console, col as any));
+	});
+
+	describe('ansi256', () => {
+		it('should print foreground demo', () => {
+			const strs = new Array(256).fill(0).map((_, i) => k.ansi256(i)('foo'));
+			console.log(columnize(strs, 16));
+		});
+
+		it('should print background demo', () => {
+			const strs = new Array(256).fill(0).map((_, i) => k.ansi256Bg(i)('foo'));
+			console.log(columnize(strs, 16));
+		});
+
+		it('should mix with modifiers', () => {
+			const strs = new Array(256)
+				.fill(0)
+				.map((_, i) => k.dim(k.ansi256(i)('foo')));
+			console.log(columnize(strs, 16));
+		});
+
+		it('should be stripped', () => {
+			t.equal(k.stripColors(k.ansi256(194)('foo')), 'foo');
+		});
 	});
 
 	it('should toggle enabled or disabled', () => {
