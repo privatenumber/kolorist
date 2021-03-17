@@ -39,18 +39,10 @@ describe('colors', () => {
 
 	it('should print demo', () => {
 		const strs = Object.keys(k)
-			.filter(
-				key => typeof (k as any)[key] === 'function' || key === 'stripColors'
-			)
+			.filter(key => !['options', 'ansi256', 'ansi256Bg', 'link'].includes(key))
 			.map(x => (k as any)[x]('foobar'));
 
-		const columns: string[][] = [];
-		const count = 4;
-		for (let i = 0; i < strs.length; i++) {
-			(columns[i % count] || (columns[i % count] = [])).push(strs[i]);
-		}
-
-		columns.forEach(col => console.log.apply(console, col as any));
+		console.log(columnize(strs, 16));
 	});
 
 	describe('ansi256', () => {
