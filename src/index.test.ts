@@ -1,5 +1,5 @@
 import * as k from './index';
-import * as t from 'assert';
+import { strict as t } from 'assert';
 import * as pty from 'node-pty';
 import * as path from 'path';
 import * as child_process from 'child_process';
