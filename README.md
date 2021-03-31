@@ -16,11 +16,15 @@ import { red, cyan } from 'kolorist';
 console.log(red(`Error: something failed in ${cyan('my-file.js')}.`));
 ```
 
-You can also disable colors globally via the following environment variables:
+You can also disable or enable colors globally via the following environment variables:
 
-- `NODE_DISABLE_COLORS`
-- `TERM=dumb`
-- `FORCE_COLOR=0`
+- disable:
+  - `NODE_DISABLE_COLORS`
+  - `TERM=dumb`
+  - `FORCE_COLOR=0`
+
+- enable:
+  - `FORCE_COLOR=1`
 
 On top of that you can disable colors right from node:
 
