@@ -23,11 +23,13 @@ let supportLevel: SupportLevel = SupportLevel.none;
 
 if (globalVar.process && globalVar.process.env && globalVar.process.stdout) {
 	const { FORCE_COLOR, NODE_DISABLE_COLORS, TERM } = globalVar.process.env;
-	enabled =
-		!NODE_DISABLE_COLORS &&
-		TERM !== 'dumb' &&
-		FORCE_COLOR !== '0' &&
-		process.stdout.isTTY;
+	if (NODE_DISABLE_COLORS || FORCE_COLOR === '0') {
+		enabled = false;
+	} else if (FORCE_COLOR === '1') {
+		enabled = true;
+	} else {
+		enabled = TERM !== 'dumb' && process.stdout.isTTY;
+	}
 
 	if (enabled) {
 		supportLevel = TERM && TERM.endsWith('-256color')
