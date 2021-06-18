@@ -27,14 +27,30 @@ if (globalVar.process && globalVar.process.env && globalVar.process.stdout) {
 		enabled = false;
 	} else if (FORCE_COLOR === '1') {
 		enabled = true;
+	} else if (TERM === 'dumb') {
+		enabled = false;
+	} else if (
+		'CI' in globalVar.process.env &&
+		[
+			'TRAVIS',
+			'CIRCLECI',
+			'APPVEYOR',
+			'GITLAB_CI',
+			'GITHUB_ACTIONS',
+			'BUILDKITE',
+			'DRONE',
+		].some(vendor => vendor in globalVar.process.env)
+	) {
+		enabled = true;
 	} else {
-		enabled = TERM !== 'dumb' && process.stdout.isTTY;
+		enabled = process.stdout.isTTY;
 	}
 
 	if (enabled) {
-		supportLevel = TERM && TERM.endsWith('-256color')
-			? SupportLevel.ansi256
-			: SupportLevel.ansi;
+		supportLevel =
+			TERM && TERM.endsWith('-256color')
+				? SupportLevel.ansi256
+				: SupportLevel.ansi;
 	}
 }
 

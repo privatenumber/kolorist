@@ -92,13 +92,19 @@ describe('color switch', () => {
 	it('should be enabled in terminals by default', done => {
 		let output = '';
 		const term = pty.spawn(
-			path.join(__dirname, '..', 'node_modules/.bin/ts-node'),
-			['-e', 'console.log(require("./index.ts").blue("foo"))'],
+			process.execPath,
+			[
+				'-r',
+				'ts-node/register',
+				'-e',
+				'console.log(require("./index.ts").blue("foo"))',
+			],
 			{
 				name: 'test with pseudo tty',
 				cols: 80,
 				rows: 30,
 				cwd: __dirname,
+				env: {},
 			}
 		);
 		term.onData(data => (output += data));
@@ -114,16 +120,76 @@ describe('color switch', () => {
 	it('should be disabled in non-interactive terminals', done => {
 		let output = '';
 		const subprocess = child_process.spawn(
-			path.join(__dirname, '..', 'node_modules/.bin/ts-node'),
-			['-e', 'console.log(require("./index.ts").blue("foo"))'],
+			process.execPath,
+			[
+				'-r',
+				'ts-node/register',
+				'-e',
+				'console.log(require("./index.ts").blue("foo"))',
+			],
 			{
 				cwd: __dirname,
+				stdio: 'pipe',
+				env: {},
+			}
+		);
+		subprocess.stdout.on('data', data => (output += data));
+		subprocess.stderr.on('data', data => (output += data));
+		subprocess.on('exit', () => {
+			t.equal(JSON.stringify(output.trim()), JSON.stringify('foo'));
+			done();
+		});
+	}).timeout(20000); // typescript is slow
+
+	it('should be disabled when TERM=dumb', done => {
+		let output = '';
+		const subprocess = child_process.spawn(
+			process.execPath,
+			[
+				'-r',
+				'ts-node/register',
+				'-e',
+				'console.log(require("./index.ts").blue("foo"))',
+			],
+			{
+				cwd: __dirname,
+				env: {
+					TERM: 'dumb',
+				},
 				stdio: 'pipe',
 			}
 		);
 		subprocess.stdout.on('data', data => (output += data));
+		subprocess.stderr.on('data', data => (output += data));
 		subprocess.on('exit', () => {
 			t.equal(JSON.stringify(output.trim()), JSON.stringify('foo'));
+			done();
+		});
+	}).timeout(20000); // typescript is slow
+
+	it('should be enabled in CI environments', done => {
+		let output = '';
+		const subprocess = child_process.spawn(
+			process.execPath,
+			[
+				'-r',
+				'ts-node/register',
+				'-e',
+				'console.log(require("./index.ts").blue("foo"))',
+			],
+			{
+				cwd: __dirname,
+				env: {
+					CI: 'true',
+					GITLAB_CI: 'true',
+				},
+				stdio: 'pipe',
+			}
+		);
+		subprocess.stdout.on('data', data => (output += data));
+		subprocess.stderr.on('data', data => (output += data));
+		subprocess.on('exit', () => {
+			t.equal(JSON.stringify(output.trim()), JSON.stringify(k.blue('foo')));
 			done();
 		});
 	}).timeout(20000); // typescript is slow
