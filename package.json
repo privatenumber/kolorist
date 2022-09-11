@@ -28,13 +28,13 @@
 	},
 	"exports": {
 		".": {
+			"types": "./dist/types/index.d.ts",
 			"browser": "./dist/module/index.js",
 			"import": "./dist/esm/index.mjs",
-			"require": "./dist/cjs/index.js",
-			"types": "./dist/types/index.d.ts"
+			"require": "./dist/cjs/index.js"
 		},
 		"./package.json": "./package.json",
-		"./": "./*"
+		"./*": "./*"
 	},
 	"files": [
 		"dist/",
