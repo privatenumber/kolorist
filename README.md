@@ -20,6 +20,7 @@ You can also disable or enable colors globally via the following environment var
 
 - disable:
   - `NODE_DISABLE_COLORS`
+  - `NO_COLOR`
   - `TERM=dumb`
   - `FORCE_COLOR=0`
 
