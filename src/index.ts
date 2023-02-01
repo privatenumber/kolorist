@@ -22,8 +22,8 @@ export const enum SupportLevel {
 let supportLevel: SupportLevel = SupportLevel.none;
 
 if (globalVar.process && globalVar.process.env && globalVar.process.stdout) {
-	const { FORCE_COLOR, NODE_DISABLE_COLORS, TERM } = globalVar.process.env;
-	if (NODE_DISABLE_COLORS || FORCE_COLOR === '0') {
+	const { FORCE_COLOR, NODE_DISABLE_COLORS, NO_COLOR, TERM } = globalVar.process.env;
+	if (NODE_DISABLE_COLORS || NO_COLOR || FORCE_COLOR === '0') {
 		enabled = false;
 	} else if (FORCE_COLOR === '1') {
 		enabled = true;
