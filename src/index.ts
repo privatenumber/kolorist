@@ -25,7 +25,7 @@ if (globalVar.process && globalVar.process.env && globalVar.process.stdout) {
 	const { FORCE_COLOR, NODE_DISABLE_COLORS, NO_COLOR, TERM } = globalVar.process.env;
 	if (NODE_DISABLE_COLORS || NO_COLOR || FORCE_COLOR === '0') {
 		enabled = false;
-	} else if (FORCE_COLOR === '1') {
+	} else if (FORCE_COLOR === '1' || FORCE_COLOR === '2' || FORCE_COLOR === '3') {
 		enabled = true;
 	} else if (TERM === 'dumb') {
 		enabled = false;

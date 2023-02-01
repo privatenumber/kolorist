@@ -26,6 +26,8 @@ You can also disable or enable colors globally via the following environment var
 
 - enable:
   - `FORCE_COLOR=1`
+  - `FORCE_COLOR=2`
+  - `FORCE_COLOR=3`
 
 On top of that you can disable colors right from node:
 
