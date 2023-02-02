@@ -1,3 +1,4 @@
+// npx ts-node-transpile-only .github/demo.ts
 import * as k from '../src/index';
 
 const modifiers = ['reset', 'bold', 'dim', 'italic', 'underline', 'inverse', 'hidden', 'strikethrough'];
