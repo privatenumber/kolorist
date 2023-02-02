@@ -1,7 +1,6 @@
 import * as k from './index';
 import { strict as t } from 'assert';
 import * as pty from 'node-pty';
-import * as path from 'path';
 import * as child_process from 'child_process';
 
 function columnize(arr: string[], count: number = 16): string {
@@ -42,7 +41,7 @@ describe('colors', () => {
 
 	it('should print demo', () => {
 		const strs = Object.keys(k)
-			.filter(key => !['options', 'ansi256', 'ansi256Bg', 'link'].includes(key))
+			.filter(key => !['options', 'ansi256', 'ansi256Bg', 'link', 'SupportLevel'].includes(key))
 			.map(x => (k as any)[x]('foobar'));
 
 		console.log(columnize(strs, 16));
@@ -95,7 +94,7 @@ describe('color switch', () => {
 			process.execPath,
 			[
 				'-r',
-				'ts-node/register',
+				'@esbuild-kit/cjs-loader',
 				'-e',
 				'console.log(require("./index.ts").blue("foo"))',
 			],
@@ -123,7 +122,7 @@ describe('color switch', () => {
 			process.execPath,
 			[
 				'-r',
-				'ts-node/register',
+				'@esbuild-kit/cjs-loader',
 				'-e',
 				'console.log(require("./index.ts").blue("foo"))',
 			],
@@ -147,7 +146,7 @@ describe('color switch', () => {
 			process.execPath,
 			[
 				'-r',
-				'ts-node/register',
+				'@esbuild-kit/cjs-loader',
 				'-e',
 				'console.log(require("./index.ts").blue("foo"))',
 			],
@@ -173,7 +172,7 @@ describe('color switch', () => {
 			process.execPath,
 			[
 				'-r',
-				'ts-node/register',
+				'@esbuild-kit/cjs-loader',
 				'-e',
 				'console.log(require("./index.ts").blue("foo"))',
 			],
