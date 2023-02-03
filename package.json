@@ -17,6 +17,7 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
+		"@changesets/cli": "^2.26.0",
 		"@esbuild-kit/cjs-loader": "^2.4.1",
 		"@types/mocha": "^8.2.1",
 		"@types/node": "^14.14.35",
