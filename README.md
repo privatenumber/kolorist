@@ -2,7 +2,7 @@
 
 Tiny library to put colors into stdin/stdout :tada:
 
-![Screenshot of terminal colors](screenshot.png)
+![Screenshot of terminal colors](.github/demo.png)
 
 ## Usage
 

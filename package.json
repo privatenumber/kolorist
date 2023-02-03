@@ -37,8 +37,7 @@
 		"./*": "./*"
 	},
 	"files": [
-		"dist/",
-		"screenshot.png"
+		"dist/"
 	],
 	"prettier": {
 		"useTabs": true,
