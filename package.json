@@ -7,6 +7,7 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"test": "mocha -r @esbuild-kit/cjs-loader --extension ts,js src/*.test.ts",
+		"type-check": "tsc --noEmit",
 		"build": "rimraf dist && pkgroll",
 		"prepublishOnly": "npm run build"
 	},
